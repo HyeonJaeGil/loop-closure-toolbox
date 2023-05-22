@@ -1,2 +1,5 @@
 build/**
 .vscode/**
+*.so
+*.o
+*.egg-info
