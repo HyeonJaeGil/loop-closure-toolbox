@@ -9,6 +9,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+import shutil
 
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
@@ -37,6 +38,15 @@ class CMakeBuild(build_ext):
         ext_fullpath = Path.cwd() / self.get_ext_fullpath(ext.name)
         extdir = ext_fullpath.parent.resolve()
 
+        # Delete CMakeCache.txt and CMakeFiles directory
+        build_temp = Path(self.build_temp) / ext.name
+        cmake_cache_file = build_temp / "CMakeCache.txt"
+        cmake_files_dir = build_temp / "CMakeFiles"
+        if cmake_cache_file.exists():
+            cmake_cache_file.unlink()
+        if cmake_files_dir.exists():
+            shutil.rmtree(cmake_files_dir)
+
         # Using this requires trailing slash for auto-detection & inclusion of
         # auxiliary "native" libs
 
@@ -57,15 +67,9 @@ class CMakeBuild(build_ext):
         ]
         build_args = []
 
-        # Set Python_EXECUTABLE instead if you use PYBIND11_FINDPYTHON
-        # EXAMPLE_VERSION_INFO shows you how to pass a value into the C++ code
-        # from Python.
-        cmake_args = [
-            f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}{os.sep}",
-            f"-DPYTHON_EXECUTABLE={sys.executable}",
-            f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
-        ]
-        build_args = []
+        # set BUILD_PYBIND to ON to build pybind11
+        cmake_args += [f"-DBUILD_PYBIND=ON"]
+
         # Adding CMake arguments set as environment variable
         # (needed e.g. to build for ARM OSx on conda-forge)
         if "CMAKE_ARGS" in os.environ:
@@ -147,7 +151,7 @@ setup(
     author_email="now9728@gmail.com",
     description="Pybind wrapper for DBoW3",
     long_description="",
-    ext_modules=[CMakeExtension("pydbow")],
+    # ext_modules=[CMakeExtension("pydbow"), CMakeExtension("pyvlad")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     python_requires=">=3.7",

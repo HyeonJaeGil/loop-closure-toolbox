@@ -7,5 +7,9 @@ set(VLAD_LIBS VLAD)
 set(PYBIND_DIRS pybind11/include)
 
 include_directories(${DBOW_DIRS} ${VLAD_DIRS} ${PYBIND_DIRS})
+
 pybind11_add_module(pydbow pydbow.cpp)
 target_link_libraries(pydbow PRIVATE ${DBOW_LIBS})
+
+pybind11_add_module(pyvlad pyvlad.cpp)
+target_link_libraries(pyvlad PRIVATE ${VLAD_LIBS})
