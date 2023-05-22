@@ -3,7 +3,7 @@
 namespace VLAD {
 
 std::ostream &operator<<(std::ostream &os, const Result &ret) {
-  os << "<EntryId: " << ret.id << ", Score: " << ret.score << ", Inliers: " << ret.inliers << ">";
+  os << "<EntryId: " << ret.id << ", Score: " << ret.score << ">";
   return os;
 }
 

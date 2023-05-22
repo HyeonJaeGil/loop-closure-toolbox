@@ -7,10 +7,8 @@ namespace VLAD {
 class Result {
 public:
 
-  Result() : id(0), score(0), inliers(0) {}
-
-  Result(unsigned int id, double score, unsigned int inliers = 0)
-      : id(id), score(score), inliers(inliers) {}
+  Result(unsigned int id=0, double score=0.0)
+      : id(id), score(score) {}
   
   Result(const DBoW3::Result &res) : id(res.Id), score(res.Score) {}
   
@@ -30,7 +28,6 @@ public:
 
   unsigned int id;
   double score;
-  unsigned int inliers;
 };
 
 class QueryResults : public std::vector<Result> {
