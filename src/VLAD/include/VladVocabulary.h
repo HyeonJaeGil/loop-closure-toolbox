@@ -31,14 +31,21 @@ public:
   explicit Vocabulary(std::shared_ptr<DBoW3::Vocabulary> vocabulary);
 
   /**
+   * @brief Constructor from vocabulary path
+   *
+   * @param vocabulary_path
+   */
+  explicit Vocabulary(const std::string &vocabulary_path);
+
+  /**
    * @brief Copy constructor
-   * 
+   *
    */
   Vocabulary(const Vocabulary &other);
 
   /**
-   * @brief assignment operator
-   * 
+   * @brief assignment operator (deleted)
+   *
    */
   Vocabulary &operator=(const Vocabulary &other) = delete;
 
@@ -49,7 +56,8 @@ public:
    *
    * @return the computed binary VLAD descriptor
    */
-  [[nodiscard]] AggregationVector transform(const std::vector<cv::Mat> &features);
+  [[nodiscard]] AggregationVector
+  transform(const std::vector<cv::Mat> &features);
 
   /**
    * @brief transform a set of descriptors into a VLAD vector
@@ -65,7 +73,58 @@ public:
    * @param y VLAD
    * @return computed score
    */
-  [[nodiscard]] double score(const AggregationVector &x, const AggregationVector &y) const;
+  [[nodiscard]] double score(const AggregationVector &x,
+                             const AggregationVector &y) const;
+
+  /**
+   * @brief Returns the number of words in the vocabulary
+   * 
+   * @return unsigned int 
+   */
+  unsigned int size() const { return vocabulary_->size(); }
+
+  /**
+   * @brief Returns true if the vocabulary is empty
+   * 
+   * @return bool 
+   */
+  bool empty() const { return vocabulary_->empty(); }
+
+  /**
+   * @brief Returns the branching factor of the tree
+   * 
+   * @return int 
+   */
+  int getBranchingFactor() const { return vocabulary_->getBranchingFactor(); }
+
+  /**
+   * @brief Returns the depth levels of the tree
+   * 
+   * @return int 
+   */
+  int getDepthLevels() const { return vocabulary_->getDepthLevels(); }
+
+  /**
+   * @brief Returns the descriptor type
+   * 
+   * @return WeightingType (TF_IDF, TF, IDF, BINARY)
+   */
+  DBoW3::WeightingType getWeightingType() const { return vocabulary_->getWeightingType(); }
+
+  /**
+   * @brief Returns the scoring type
+   * 
+   * @return ScoringType (L1_NORM, L2_NORM, CHI_SQUARE, KL, BHATTACHARYYA, DOT_PRODUCT)
+   */
+  DBoW3::ScoringType getScoringType() const { return vocabulary_->getScoringType(); }
+
+  /**
+   * @brief Returns the descriptor size
+   * 
+   * @return int 
+   */
+  int getDescriptorSize() const { return vocabulary_->getDescriptorSize(); }
+
 
   /**
    * @brief print the vocabulary information
@@ -75,13 +134,7 @@ public:
    * @return std::ostream&
    */
   friend std::ostream &operator<<(std::ostream &os, const Vocabulary &voc) {
-    os << "Vocabulary information: " << std::endl;
-    os << " - branching factor: "
-              << voc.vocabulary_->getBranchingFactor() << std::endl;
-    os << " - depth levels: " << voc.vocabulary_->getDepthLevels()
-              << std::endl;
-    os << " - number of words: " << voc.vocabulary_->size() << std::endl;
-
+    os << *voc.vocabulary_;
     return os;
   }
 

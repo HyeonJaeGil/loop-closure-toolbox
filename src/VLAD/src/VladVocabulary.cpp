@@ -21,12 +21,21 @@ namespace VLAD {
 
 Vocabulary::Vocabulary(std::shared_ptr<DBoW3::Vocabulary> vocabulary)
     : vocabulary_(std::move(vocabulary)),
-      d_length_(vocabulary_->getDescritorSize()),
+      d_length_(vocabulary_->getDescriptorSize()),
       clusters_n_(static_cast<int>(pow(vocabulary_->getBranchingFactor(),
                                        vocabulary_->getDepthLevels()))),
       v_length_(static_cast<int>(pow(vocabulary_->getBranchingFactor(),
                                      vocabulary_->getDepthLevels()) *
-                                 vocabulary_->getDescritorSize() * 8)) {}
+                                 vocabulary_->getDescriptorSize() * 8)) {}
+
+Vocabulary::Vocabulary(const std::string &vocabulary_path)
+    : vocabulary_(std::make_shared<DBoW3::Vocabulary>(vocabulary_path)),
+      d_length_(vocabulary_->getDescriptorSize()),
+      clusters_n_(static_cast<int>(pow(vocabulary_->getBranchingFactor(),
+                                       vocabulary_->getDepthLevels()))),
+      v_length_(static_cast<int>(pow(vocabulary_->getBranchingFactor(),
+                                     vocabulary_->getDepthLevels()) *
+                                 vocabulary_->getDescriptorSize() * 8)) {}
 
 Vocabulary::Vocabulary(const Vocabulary &other)
     : vocabulary_(std::move(other.vocabulary_)), d_length_(other.d_length_),
@@ -36,15 +45,28 @@ Vocabulary::Vocabulary(const Vocabulary &other)
 
 void Vocabulary::findCentroid(const cv::Mat &desc, cv::Mat &centroid,
                               unsigned int &id_centroid) {
-  // Find the closest centroid in the vocabulary
+  if (this->empty()){
+    std::cerr << "Vocabulary is empty!" << std::endl;
+    exit(1);
+  }
   id_centroid = vocabulary_->transform(desc);
   vocabulary_->getWord(id_centroid).convertTo(centroid, CV_8UC1);
 }
 
 // --------------------------------------------------------------------------
 
+AggregationVector Vocabulary::transform(const cv::Mat &features) {
+  std::vector<cv::Mat> feature_vec(features.rows);
+  for (int i = 0; i < features.rows; ++i) {
+    feature_vec[i] = features.row(i);
+  }
+  return transform(feature_vec);
+}
+
+// --------------------------------------------------------------------------
+
 AggregationVector Vocabulary::transform(const std::vector<cv::Mat> &features) {
-  if (features.empty()) {
+  if (features.empty() || this->empty()) {
     return AggregationVector();
   }
   cv::Mat diff, sum;
@@ -72,17 +94,8 @@ AggregationVector Vocabulary::transform(const std::vector<cv::Mat> &features) {
 
 // --------------------------------------------------------------------------
 
-AggregationVector Vocabulary::transform(const cv::Mat &features) {
-  std::vector<cv::Mat> feature_vec(features.rows);
-  for (int i = 0; i < features.rows; ++i) {
-    feature_vec[i] = features.row(i);
-  }
-  return transform(feature_vec);
-}
-
-// --------------------------------------------------------------------------
-
-double Vocabulary::score(const AggregationVector &x, const AggregationVector &y) const {
+double Vocabulary::score(const AggregationVector &x,
+                         const AggregationVector &y) const {
 
   cv::Mat x_mat = x.toMat();
   cv::Mat y_mat = y.toMat();
