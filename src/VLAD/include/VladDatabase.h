@@ -68,7 +68,7 @@ public:
    * Add descriptors to the database and return the index
    *
    * @param descriptors
-   * @return index of the input
+   * @return index of the input descriptor
    */
   unsigned int add(const cv::Mat &descriptors);
 
@@ -76,7 +76,7 @@ public:
    * Add descriptors (one per row) to the database and return the index
    *
    * @param descriptors
-   * @return index of the input
+   * @return index of the input descriptor
    */
   unsigned int add(const std::vector<cv::Mat> &descriptors);
 
@@ -84,14 +84,14 @@ public:
    * Add aggregation to the database and return the index
    *
    * @param aggregation
-   * @return index of the input
+   * @return index of the input aggregation
    */
   unsigned int add(const AggregationVector &aggregation);
 
   /**
    * @brief query the database with the input descriptors
    * @param[in] descriptors query descriptors, one row per descriptor
-   * @param[out] results results
+   * @param[out] results QueryResults
    * @param[in] max_results maximum number of results to return. <= 0 means all
    * @param[in] max_id maximum id of the results to return. < 0 means all
    */
@@ -101,7 +101,7 @@ public:
   /**
    * @brief query the database with the input descriptors
    * @param[in] descriptors query descriptors
-   * @param[out] results results
+   * @param[out] results QueryResults
    * @param[in] max_results maximum number of results to return. <= 0 means all
    * @param[in] max_id maximum id of the results to return. < 0 means all
    */
@@ -112,7 +112,7 @@ public:
   /**
    * @brief query the database with the input aggregation
    * @param[in] aggregation query aggregation
-   * @param[out] results results
+   * @param[out] results QueryResults
    * @param[in] max_results maximum number of results to return. <= 0 means all
    * @param[in] max_id maximum id of the results to return. < 0 means all
    */
@@ -122,7 +122,7 @@ public:
   /**
    * @brief compute pairwise scores between all the element in the database
    */
-  cv::Mat computePairwiseDistance();
+  cv::Mat computePairwiseDistance() const;
 
   /**
    * @brief print the database information to the output stream
@@ -136,7 +136,6 @@ public:
 
 private:
   Vocabulary vocabulary_;
-
   std::vector<AggregationVector> database_;
 };
 

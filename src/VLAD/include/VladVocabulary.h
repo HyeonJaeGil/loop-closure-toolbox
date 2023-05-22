@@ -24,7 +24,7 @@ namespace VLAD {
 class Vocabulary {
 public:
   /**
-   * Constructor
+   * Constructor from shared pointer to vocabulary
    *
    * @param vocabulary
    */
@@ -50,17 +50,15 @@ public:
   Vocabulary &operator=(const Vocabulary &other) = delete;
 
   /**
-   * @brief transform a set of descriptors into a AggregationVector vector
+   * @brief transform a set of descriptors into a AggregationVector
    * @param features
-   * @return AggregationVector vector
-   *
-   * @return the computed binary VLAD descriptor
+   * @return AggregationVector
    */
   [[nodiscard]] AggregationVector
   transform(const std::vector<cv::Mat> &features);
 
   /**
-   * @brief transform a set of descriptors into a VLAD vector
+   * @brief transform a set of descriptors into a AggregationVector
    * @param features one row per descriptor
    * @return AggregationVector vector
    *
@@ -68,9 +66,9 @@ public:
   [[nodiscard]] AggregationVector transform(const cv::Mat &features);
 
   /**
-   * Compute the similarity score between two VLADs
-   * @param x VLAD
-   * @param y VLAD
+   * Compute the similarity score between two AggregationVectors
+   * @param x AggregationVector
+   * @param y AggregationVector
    * @return computed score
    */
   [[nodiscard]] double score(const AggregationVector &x,
