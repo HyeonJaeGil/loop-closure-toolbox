@@ -53,19 +53,19 @@ unsigned int Database::add(const AggregationVector &aggregation) {
 
 // --------------------------------------------------------------------------
 
-void Database::query(const cv::Mat &descriptors, QueryResults *results,
+void Database::query(const cv::Mat &descriptors, QueryResults &results,
                      int max_results, int max_id) {
   AggregationVector aggregation = vocabulary_.transform(descriptors);
   return query(aggregation, results, max_results, max_id);
 }
 
 void Database::query(const std::vector<cv::Mat> &descriptors,
-                     QueryResults *results, int max_results, int max_id) {
+                     QueryResults &results, int max_results, int max_id) {
   AggregationVector aggregation = vocabulary_.transform(descriptors);
   return query(aggregation, results, max_results, max_id);
 }
 
-void Database::query(const AggregationVector &aggregation, QueryResults *results,
+void Database::query(const AggregationVector &aggregation, QueryResults &results,
                      int max_results, int max_id) {
   std::vector<std::pair<double, unsigned int>> scores;
   int idx = 0;
@@ -93,10 +93,10 @@ void Database::query(const AggregationVector &aggregation, QueryResults *results
     scores.resize(max_results);
 
   // copy scores to results
-  results->resize(scores.size());
+  results.resize(scores.size());
   for (std::size_t i = 0; i < scores.size(); ++i) {
-    (*results)[i].score = scores[i].first;
-    (*results)[i].id = scores[i].second;
+    results[i].score = scores[i].first;
+    results[i].id = scores[i].second;
   }
 }
 

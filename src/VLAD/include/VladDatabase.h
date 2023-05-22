@@ -95,7 +95,7 @@ public:
    * @param[in] max_results maximum number of results to return. <= 0 means all
    * @param[in] max_id maximum id of the results to return. < 0 means all
    */
-  void query(const cv::Mat &descriptors, VLAD::QueryResults *results,
+  void query(const cv::Mat &descriptors, VLAD::QueryResults &results,
              int max_results = -1, int max_id = -1);
 
   /**
@@ -106,7 +106,7 @@ public:
    * @param[in] max_id maximum id of the results to return. < 0 means all
    */
   void query(const std::vector<cv::Mat> &descriptors,
-             VLAD::QueryResults *results, int max_results = -1,
+             VLAD::QueryResults &results, int max_results = -1,
              int max_id = -1);
 
   /**
@@ -116,17 +116,23 @@ public:
    * @param[in] max_results maximum number of results to return. <= 0 means all
    * @param[in] max_id maximum id of the results to return. < 0 means all
    */
-  void query(const AggregationVector &aggregation, VLAD::QueryResults *results,
+  void query(const AggregationVector &aggregation, VLAD::QueryResults &results,
              int max_results = -1, int max_id = -1);
 
   /**
    * @brief compute pairwise scores between all the element in the database
    */
-
   cv::Mat computePairwiseDistance();
 
-  // debug
-  std::vector<AggregationVector> getDatabase() const { return database_; }
+  /**
+   * @brief print the database information to the output stream
+   */
+  friend std::ostream &operator<<(std::ostream &os, const Database &db) {
+    os << db.vocabulary_ << std::endl;
+    os << "Database size: " << db.database_.size() << std::endl;
+    return os;
+  }
+
 
 private:
   Vocabulary vocabulary_;
