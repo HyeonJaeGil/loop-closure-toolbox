@@ -87,6 +87,8 @@ void scoreVLAD() {
   std::vector<std::string> paths = std::move(
       loadImagePaths("/home/hj/Dropbox/Dataset/STHEREO-raw/01/image/rgb_left"));
 
+  paths = std::vector<std::string>(paths.begin(), paths.begin() + 10);
+
   VLAD::AggregationVector prev_vlad;
   for (auto &path : paths) {
     cv::Mat image = cv::imread(path, cv::IMREAD_GRAYSCALE);
@@ -100,4 +102,9 @@ void scoreVLAD() {
   }
 }
 
-int main() { scoreVLAD(); }
+int main() {
+  // createVocabulary();
+  transformVLAD();
+  scoreVLAD();
+  return 0;
+}

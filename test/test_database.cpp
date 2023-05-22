@@ -23,7 +23,9 @@ VLAD::Database addToDatabase() {
 
   std::cout << "Current path is " << fs::current_path() << '\n';
 
-  VLAD::Database db("../vocabulary.yml.gz");
+  VLAD::Database db("vocabulary.yml.gz");
+
+  std::cout << db << std::endl;
 
   std::vector<std::string> paths = std::move(
       loadImagePaths("/home/hj/Dropbox/Dataset/STHEREO-raw/01/image/rgb_left"));
@@ -41,6 +43,7 @@ VLAD::Database addToDatabase() {
       break;
   }
   std::cout << std::endl;
+  std::cout << db << std::endl;
   return db;
 }
 
@@ -57,7 +60,7 @@ void queryDatabase(VLAD::Database &db) {
     orb->detectAndCompute(image, cv::Mat(), keypoints, descriptor);
 
     VLAD::QueryResults results;
-    db.query(descriptor, &results, 10);
+    db.query(descriptor, results, 10);
 
     std::cout << "Query results: " << results << std::endl;
     break;
