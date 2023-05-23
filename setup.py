@@ -151,7 +151,7 @@ setup(
     author_email="now9728@gmail.com",
     description="Pybind wrapper for DBoW3",
     long_description="",
-    # ext_modules=[CMakeExtension("pydbow"), CMakeExtension("pyvlad")],
+    ext_modules=[CMakeExtension("pydbow"), CMakeExtension("pyvlad")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     python_requires=">=3.7",
