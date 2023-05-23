@@ -7,24 +7,26 @@ from tqdm import tqdm
 from imagetoolbox.ORB import detect_orb, visualize_orb
 import slamtoolbox.sthereo_dataset as sthereo
 
-###############################################
-
-dataloader = sthereo.Dataloader("/home/hj/Dropbox/Dataset/STHEREO-raw/01", 
-                                "image/rgb_left").downsample(25)
-
-# Create a new Vocabulary
-voc = pydbow.Vocabulary(4,3)
-training_features = []
-for data in tqdm(dataloader, ncols=100):
-    image = cv2.imread(data.path, 0)
-    keypoints, descriptors = detect_orb(image)
-    training_features.append(descriptors)
-
-voc.create(training_features)
-print(f'voc size: {voc.size()}')
-voc.save("sthereo_01_rgb_4_3.yaml")
 
 ###############################################
+def create_vocbulary():
+    dataloader = sthereo.Dataloader("/home/hj/Dropbox/Dataset/STHEREO-raw/01", 
+                                    "image/rgb_left").downsample(25)
+    # Create a new Vocabulary
+    voc = pydbow.Vocabulary(4,3)
+    training_features = []
+    for data in tqdm(dataloader, ncols=100):
+        image = cv2.imread(data.path, 0)
+        keypoints, descriptors = detect_orb(image)
+        training_features.append(descriptors)
+
+    voc.create(training_features)
+    print(f'voc size: {voc.size()}')
+    voc.save("sthereo_01_rgb_4_3.yaml")
+
+###############################################
+
+
 
 # load vocabulary from file
 voc_load = pyvlad.Vocabulary("sthereo_01_rgb_4_3.yaml")
@@ -42,6 +44,7 @@ keypoints_list = []
 for i, data in enumerate(dataloader):
     image = cv2.imread(data.path, 0)
     keypoints, descriptors = detect_orb(image)
+    print(descriptors.shape)
     db.add(descriptors)
     images.append(image)
     keypoints_list.append(keypoints)
@@ -68,3 +71,10 @@ for i, data in enumerate(dataloader):
     cv2.imshow('query and best', concat)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
+pdist = db.pairwiseDistance()
+print(f'pdist: {pdist.shape}')
+pdist = 255 * (pdist - pdist.min()) / (pdist.max() - pdist.min())
+pdist = pdist.astype('uint8')
+cv2.imshow('pdist', pdist)
+cv2.waitKey(0)

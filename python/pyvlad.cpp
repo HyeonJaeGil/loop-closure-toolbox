@@ -54,6 +54,23 @@ PYBIND11_MODULE(pyvlad, m) {
         return py_results;
       },
       py::arg("features"), py::arg("max_results") = 1, py::arg("max_id") = -1);
+  
+  db.def("pairwiseDistance", [](Database &self){
+    cv::Mat pdist_mat = self.computePairwiseDistance();
+    // convert pdist_mat to 2d numpy array and return
+    py::array_t<float> pdist = py::array_t<float>(pdist_mat.rows * pdist_mat.cols);
+    auto buffer_info = pdist.request();
+    float *ptr = (float *)buffer_info.ptr;
+    for (int i = 0; i < pdist_mat.rows; i++) {
+      for (int j = 0; j < pdist_mat.cols; j++) {
+        ptr[i * pdist_mat.cols + j] = pdist_mat.at<float>(i, j);
+      }
+    }
+    // reshape to 2d array
+    pdist.resize({pdist_mat.rows, pdist_mat.cols});
+    return pdist;
+
+  });
   db.def("size", &Database::size);
   db.def("__repr__", [](Database &self) {
     std::stringstream ss;
