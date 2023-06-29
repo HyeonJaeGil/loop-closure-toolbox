@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 project(VLAD)
 
-option(BUILD_PYBIND "Build pybind" ON)
-option(BUILD_TEST "Build test" OFF)
+option(BUILD_PYBIND "Build pybind" OFF)
+option(BUILD_TEST "Build test" ON)
 
 add_subdirectory(src/DBoW3)
 add_subdirectory(src/VLAD)
