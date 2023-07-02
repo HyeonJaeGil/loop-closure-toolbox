@@ -7,8 +7,11 @@ include_directories(${DBOW_DIRS} ${VLAD_DIRS})
 
 set(LIBRARIES ${DBOW_LIBS} ${VLAD_LIBS} stdc++fs)
 
-add_executable(test_vocabulary test_vocabulary.cpp)
-target_link_libraries(test_vocabulary ${LIBRARIES})
+add_executable(test_dbow_database test_dbow_database.cpp)
+target_link_libraries(test_dbow_database ${LIBRARIES})
 
-add_executable(test_database test_database.cpp)
-target_link_libraries(test_database ${LIBRARIES})
+add_executable(test_vlad_database test_vlad_database.cpp)
+target_link_libraries(test_vlad_database ${LIBRARIES})
+
+add_executable(test_vlad_transform test_vlad_transform.cpp)
+target_link_libraries(test_vlad_transform ${LIBRARIES})
