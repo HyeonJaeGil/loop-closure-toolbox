@@ -129,7 +129,7 @@ public:
    */
   friend std::ostream &operator<<(std::ostream &os, const Database &db) {
     os << db.vocabulary_ << std::endl;
-    os << "Database size: " << db.database_.size() << std::endl;
+    os << "Database size: " << db.database_.size();
     return os;
   }
 
