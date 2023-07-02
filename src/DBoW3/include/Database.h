@@ -208,6 +208,8 @@ public:
    */
   const FeatureVector& retrieveFeatures(EntryId id) const;
 
+  cv::Mat computepairwiseScore() const;
+
   /**
    * Stores the database in a file
    * @param filename
@@ -341,6 +343,9 @@ protected:
   
   /// Number of valid entries in m_dfile
   int m_nentries;
+
+  /// Vector of BoWVector of each image
+  std::vector<BowVector> m_bowvec;
   
 };
 

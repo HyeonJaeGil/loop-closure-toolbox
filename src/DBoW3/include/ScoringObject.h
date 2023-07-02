@@ -62,7 +62,7 @@ public:
     \
     /** \
      * Says if a vector must be normalized according to the scoring function \
-     * @param norm (out) if true, norm to use
+     * @param norm (out) if true, norm to use \
      * @return true iff vectors must be normalized \
      */ \
     virtual inline bool mustNormalize(LNorm &norm) const  \

@@ -102,7 +102,7 @@ void Database::query(const AggregationVector &aggregation, QueryResults &results
 
 // --------------------------------------------------------------------------
 
-cv::Mat Database::computePairwiseDistance() const {
+cv::Mat Database::computepairwiseScore() const {
   int n = database_.size();
   if (n < 1) {
     std::cerr << "Database is empty, pair-wise distance cannot be computed!"

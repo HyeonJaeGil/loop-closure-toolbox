@@ -122,7 +122,7 @@ public:
   /**
    * @brief compute pairwise scores between all the element in the database
    */
-  cv::Mat computePairwiseDistance() const;
+  cv::Mat computepairwiseScore() const;
 
   /**
    * @brief print the database information to the output stream

@@ -152,6 +152,9 @@ EntryId Database::add(const BowVector &v,
     ifrow.push_back(IFPair(entry_id, word_weight));
   }
 
+  // add bowvector into m_bowvec
+  m_bowvec.push_back(v);
+
   return entry_id;
 }
 
@@ -298,7 +301,7 @@ void Database::queryL1(const BowVector &vec,
   std::map<EntryId, double> pairs;
   std::map<EntryId, double>::iterator pit;
 
-  for(vit = vec.begin(); vit != vec.end(); ++vit)
+  for(vit = vec.begin(); vit != vec.end(); ++vit) // for every word in BowVector
   {
     const WordId word_id = vit->first;
     const WordValue& qvalue = vit->second;
@@ -307,7 +310,7 @@ void Database::queryL1(const BowVector &vec,
 
     // IFRows are sorted in ascending entry_id order
 
-    for(auto rit = row.begin(); rit != row.end(); ++rit)
+    for(auto rit = row.begin(); rit != row.end(); ++rit) // for every entry that has the word_i
     {
       const EntryId entry_id = rit->entry_id;
       const WordValue& dvalue = rit->word_weight;
@@ -793,6 +796,35 @@ const FeatureVector& Database::retrieveFeatures
   assert(id < size());
   return m_dfile[id];
 }
+
+
+// --------------------------------------------------------------------------
+
+cv::Mat Database::computepairwiseScore() const
+{
+  int n = size();
+  if (n < 1) {
+    std::cerr << "Database is empty, pair-wise distance cannot be computed!"
+              << std::endl;
+    return cv::Mat();
+  }
+  std::cout << "Computing pair-wise distance for " << n << " images"
+            << std::endl;
+  cv::Mat distances(n, n, CV_64F);
+
+#pragma omp parallel for
+  for (int i = 0; i < n; i++) {
+    for (int j = i; j < n; j++) {
+      double dist = m_voc->score(m_bowvec[i], m_bowvec[j]);
+      distances.at<double>(i, j) = dist;
+      distances.at<double>(j, i) = dist;
+    }
+  }
+
+  return distances;
+
+}
+
 
 // --------------------------------------------------------------------------
 
