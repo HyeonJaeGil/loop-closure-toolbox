@@ -10,13 +10,27 @@ There are no Feature Extraction or Matching utilities. We provide:
 So users are recommended to include this repository in their own SLAM project ***as a module***. 
 
 
+### How to build
+#### C++
+Simply use cmake for build, without any modification.
+There are two definitions, *BUILD_PYBIND* (default *OFF*) and *BUILD_TEST* (default *ON*).
+```
+mkdir build && cd build
+cmake .. && cmake --build .
+```
+
+#### Python
+Use pip for installation.
+pybind version will be built *as default*, if you build with command like:
+```
+pip install -e .
+```
+
 ### How to use (C++)
 Please refer to [test folder](./test/) to check the usage of Vocabulary and Database.
-**TODO**
 
 ### How to use (Python)
-Please refer to [pydbow example](./python/test_pydbow.py) and [pyvlad example](./python/test_pyvlad.py) to check the usage of Vocabulary and Database.
-**TODO**
+Please refer to [python folder](./python/) to check the usage of pybind version.
 
 
 
