@@ -9,10 +9,11 @@ import slamtoolbox.sthereo_dataset as sthereo
 
 
 ###############################################
-def create_vocbulary():
+
+# Create a new Vocabulary
+def create_vocabulary():
     dataloader = sthereo.Dataloader("/home/hj/Dropbox/Dataset/STHEREO-raw/01", 
                                     "image/rgb_left").downsample(25)
-    # Create a new Vocabulary
     voc = pydbow.Vocabulary(4,3)
     training_features = []
     for data in tqdm(dataloader, ncols=100):
@@ -22,18 +23,17 @@ def create_vocbulary():
 
     voc.create(training_features)
     print(f'voc size: {voc.size()}')
-    voc.save("sthereo_01_rgb_4_3.yaml")
+    voc.save("./config/sthereo_01_rgb_4_3.yaml")
 
 ###############################################
 
 
-
 # load vocabulary from file
-voc_load = pyvlad.Vocabulary("sthereo_01_rgb_4_3.yaml")
+voc_load = pyvlad.Vocabulary("./config/sthereo_01_rgb_4_3.yaml")
 print(f'voc_load: {voc_load}')
 
 # Create a new Database
-db = pyvlad.Database("sthereo_01_rgb_4_3.yaml")
+db = pyvlad.Database("./config/sthereo_01_rgb_4_3.yaml")
 print(f'db: {db}')
 
 dataloader = sthereo.Dataloader("/home/hj/Dropbox/Dataset/STHEREO-raw/01", 
@@ -44,7 +44,7 @@ keypoints_list = []
 for i, data in enumerate(dataloader):
     image = cv2.imread(data.path, 0)
     keypoints, descriptors = detect_orb(image)
-    print(descriptors.shape)
+    # print(descriptors.shape)
     db.add(descriptors)
     images.append(image)
     keypoints_list.append(keypoints)
@@ -72,9 +72,9 @@ for i, data in enumerate(dataloader):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-pdist = db.pairwiseDistance()
-print(f'pdist: {pdist.shape}')
-pdist = 255 * (pdist - pdist.min()) / (pdist.max() - pdist.min())
-pdist = pdist.astype('uint8')
-cv2.imshow('pdist', pdist)
+pscore = db.compute_pairwise_score()
+print(f'pscore: {pscore.shape}')
+pscore = (pscore * 255).astype('uint8')
+cv2.imshow('pscore', pscore)
+cv2.imwrite('pscore_01_vlad.png', pscore)
 cv2.waitKey(0)

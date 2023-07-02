@@ -8,25 +8,25 @@ import slamtoolbox.sthereo_dataset as sthereo
 
 ###############################################
 
-dataloader = sthereo.Dataloader("/home/hj/Dropbox/Dataset/STHEREO-raw/01", 
-                                "image/rgb_left").downsample(25)
-
 # Create a new Vocabulary
-voc = pydbow.Vocabulary(4,3)
-training_features = []
-for data in tqdm(dataloader, ncols=100):
-    image = cv2.imread(data.path, 0)
-    keypoints, descriptors = detect_orb(image)
-    training_features.append(descriptors)
+def create_vocabulary():
+    dataloader = sthereo.Dataloader("/home/hj/Dropbox/Dataset/STHEREO-raw/01", 
+                                    "image/rgb_left").downsample(25)
+    voc = pydbow.Vocabulary(4,3)
+    training_features = []
+    for data in tqdm(dataloader, ncols=100):
+        image = cv2.imread(data.path, 0)
+        keypoints, descriptors = detect_orb(image)
+        training_features.append(descriptors)
 
-voc.create(training_features)
-print(f'voc size: {voc.size()}')
-voc.save("sthereo_01_rgb_4_3.yaml")
+    voc.create(training_features)
+    print(f'voc size: {voc.size()}')
+    voc.save("sthereo_01_rgb_4_3.yaml")
 
 ###############################################
 
 # load vocabulary from file
-voc_load = pydbow.Vocabulary("sthereo_01_rgb_4_3.yaml")
+voc_load = pydbow.Vocabulary("./config/sthereo_01_rgb_4_3.yaml")
 print(f'voc_load: {voc_load}')
 
 # Create a new Database
@@ -67,3 +67,11 @@ for i, data in enumerate(dataloader):
     cv2.imshow('query and best', concat)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
+pscore = db.compute_pairwise_score()
+print(f'pscore: {pscore.shape}')
+# multiply by 255 and convert to uint8
+pscore = (pscore * 255).astype('uint8')
+cv2.imshow('pscore', pscore)
+cv2.imwrite('pscore_01_dbow.png', pscore)
+cv2.waitKey(0)
