@@ -1,11 +1,11 @@
-# DBoW3 + VLAD
+# Loop Closure Detection Toolbox (LCD-Toolbox)
 ## C++ and Python interface for Loop closure Detection
 
-This repository provides well-known two loop closure detection modules, 
-*DBoW3* and *VLAD* (Vector of Locally Aggregated Descriptors), in both C++ and Python interface.
+This repository provides API for well-known loop closure detection modules.
+**Currently, *DBoW3* and *VLAD* (Vector of Locally Aggregated Descriptors) are supported.**
 There are no Feature Extraction or Matching utilities. We provide:
-- Feature Aggregation (BoW or VLAD)
-- Database Management (add + query)
+- **Feature Aggregation** (BoW or VLAD for now on)
+- **Database Management** (add + query)
   
 So users are recommended to include this repository in their own SLAM project ***as a module***. 
 
@@ -27,7 +27,7 @@ pip install -e .
 ```
 
 ### How to use (C++)
-Please refer to [test folder](./test/) to check the usage of Vocabulary and Database.
+Please refer to [test folder](./test/) to check the usage of C++ version.
 
 ### How to use (Python)
 Please refer to [python folder](./python/) to check the usage of pybind version.

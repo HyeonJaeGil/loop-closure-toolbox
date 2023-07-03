@@ -147,13 +147,13 @@ class CMakeBuild(build_ext):
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
-    name="pyvlad",
+    name="loopclosuretoolbox-python",
     version="0.0.0",
     author="Hyeonjae Gil",
     author_email="now9728@gmail.com",
-    description="Pybind wrapper for DBoW3",
+    description="Pybind wrapper for Loop Closure Toolbox",
     long_description="",
-    ext_modules=[CMakeExtension("pydbow"), CMakeExtension("pyvlad")],
+    ext_modules=[CMakeExtension("loopclosuretoolbox")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     python_requires=">=3.7",

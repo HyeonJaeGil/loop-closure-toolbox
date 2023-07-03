@@ -1,27 +1,27 @@
-# Python API of DBoW3 and VLAD
+# Python API of LCD Toolbox
 
-This is pybind version of DBoW3 and VLAD C++ libraries. 
+This is pybind version of Loop Closure Detection C++ libraries. 
 Since python is a very powerful language for deep learning, 
 **this implementation can bind Loop Clousre Detection with Deep Learning Global descriptors.**
 
 ## What's inside?
-We offer two main libraries: **pydbow** and **pyvlad**.
-Since two libraries have almost identical API, we will only explain with pydbow here.
+We offer two main modules: **dbow** and **vlad**.
+Since two libraries have almost identical API, we will only explain with dbow here.
 
-## pydbow
+## loopclosuretoolbox.dbow
 For DBoW3, We offer (almost) the same API as C++. 
 Here's an simple example.
 
 ### Create vocabulary
 We can either load vocabulary from path or create with HKMeans.
 ```python
-import pydbow
+import loopclosuretoolbox.dbow as dbow
 
 # create Vocabulary instance from file path
-voc_load = pydbow.Vocabulary("./config/sthereo_01_rgb_4_3.yaml")
+voc_load = dbow.Vocabulary("./config/sthereo_01_rgb_4_3.yaml")
 
 # or create Vocabulary later
-voc_created = pydbow.Vocabulary(4,3) # k=4, l=3
+voc_created = dbow.Vocabulary(4,3) # k=4, l=3
 training_features = ... # list of local descriptors to be used for train
 voc_created.create(training_features)
 ```
@@ -29,10 +29,10 @@ voc_created.create(training_features)
 ### managing database
 Users can use `add` and `query` API just like C++.
 ```python
-import pydbow
+import loopclosuretoolbox.dbow as dbow
 
 # create Database with Vocabulary instance (voc)
-db = pydbow.Database(voc, False, 0)
+db = dbow.Database(voc, False, 0)
 
 # add entries to Database
 for image in images:
