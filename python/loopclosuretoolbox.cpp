@@ -30,6 +30,7 @@ PYBIND11_MODULE(loopclosuretoolbox, m) {
 
   py::class_<DBoW3::Vocabulary> vocab_dbow(m_dbow, "Vocabulary");
   vocab_dbow.def(py::init<int, int>());            // k, L
+  vocab_dbow.def(py::init<int, int, DBoW3::WeightingType, DBoW3::ScoringType>()); // k, L, weighting, scoring
   vocab_dbow.def(py::init<const std::string &>()); // load from file
   vocab_dbow.def(
       "create",
@@ -50,6 +51,35 @@ PYBIND11_MODULE(loopclosuretoolbox, m) {
       },
       py::arg("filename"), py::arg("binary") = true);
   vocab_dbow.def("size", &DBoW3::Vocabulary::size);
+  vocab_dbow.def(
+      "get_word_weight",
+      [](DBoW3::Vocabulary &self, unsigned int word_id) {
+        double word_weight = self.getWordWeight(word_id);
+        return word_weight;
+      },
+      py::arg("word_id"));
+  vocab_dbow.def(
+      "get_word_descriptor",
+      [](DBoW3::Vocabulary &self, unsigned int word_id) {
+        cv::Mat word_descriptor_mat = self.getWord(word_id);
+        auto word_descriptor_array = toArray<uint8_t>(word_descriptor_mat);
+        return word_descriptor_array;
+      },
+      py::arg("word_id"));
+  vocab_dbow.def(
+    "transform",
+    [](DBoW3::Vocabulary &self, py::array_t<uint8_t> &features) {
+      cv::Mat mat = toMat<uint8_t>(features);
+      DBoW3::BowVector bow_vector;
+      self.transform(mat, bow_vector);
+      // convert bow_vector to pair of (key, value)
+      py::list py_bow_vector;
+      for (const auto &key_value : bow_vector) {
+        py_bow_vector.append(py::make_tuple(key_value.first, key_value.second));
+      }
+      return py_bow_vector;
+    },
+    py::arg("features"));
   vocab_dbow.def("__repr__", [](DBoW3::Vocabulary &self) {
     std::stringstream ss;
     ss << self;
