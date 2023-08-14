@@ -70,6 +70,9 @@ class CMakeBuild(build_ext):
         # set BUILD_PYBIND to ON to build pybind11
         cmake_args += [f"-DBUILD_PYBIND=ON"]
 
+        # set BUILD_TEST to OFF to disable building tests (default: ON)
+        cmake_args += [f"-DBUILD_TEST=OFF"]
+
         # Adding CMake arguments set as environment variable
         # (needed e.g. to build for ARM OSx on conda-forge)
         if "CMAKE_ARGS" in os.environ:
