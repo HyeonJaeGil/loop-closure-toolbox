@@ -207,6 +207,8 @@ public:
   
   /**
    * Returns the descriptor of a word
+   * (TODO: deal with segmentation fault)
+   * 
    * @param wid word id
    * @return descriptor
    */
@@ -214,6 +216,7 @@ public:
   
   /**
    * Returns the weight of a word
+   * (TODO: deal with segmentation fault)
    * @param wid word id
    * @return weight
    */
