@@ -1,4 +1,21 @@
+cmake_minimum_required(VERSION 3.12)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+if(APPLE)
+    # Assuming you're using LLVM/Clang installed via Homebrew on macOS
+    set(CMAKE_C_COMPILER "/opt/homebrew/opt/llvm/bin/clang")
+    set(CMAKE_CXX_COMPILER "/opt/homebrew/opt/llvm/bin/clang++")
+elseif(UNIX AND NOT APPLE) # Linux
+    set(CMAKE_C_COMPILER "/usr/bin/gcc")
+    set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+endif()
+
 add_subdirectory(pybind11)
+
+project(loopclosuretoolbox-python LANGUAGES CXX)
 
 set(DBOW_DIRS ../src/DBoW3/include)
 set(DBOW_LIBS DBoW3)

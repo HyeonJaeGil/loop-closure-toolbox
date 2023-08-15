@@ -1,10 +1,19 @@
 #pragma once
-#include <experimental/filesystem>
 #include <set>
 #include <vector>
 #include <algorithm>
+#include <iostream>
+#include <string>
 
-namespace fs = std::experimental::filesystem;
+#if defined(__APPLE__)
+    #include <filesystem>
+    namespace fs = std::filesystem;
+#elif defined(__linux__)
+    #include <experimental/filesystem>
+    namespace fs = std::experimental::filesystem;
+#else
+    #error "Platform not supported"
+#endif
 
 std::vector<std::string> loadImagePaths(const std::string &directory) {
   std::vector<std::string> images;

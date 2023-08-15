@@ -7,6 +7,17 @@ endif ()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+if(APPLE)
+    # Assuming you're using LLVM/Clang installed via Homebrew on macOS
+    set(CMAKE_C_COMPILER "/opt/homebrew/opt/llvm/bin/clang")
+    set(CMAKE_CXX_COMPILER "/opt/homebrew/opt/llvm/bin/clang++")
+elseif(UNIX AND NOT APPLE) # Linux
+    set(CMAKE_C_COMPILER "/usr/bin/gcc")
+    set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+endif()
+
 
 #################################
 #
@@ -45,12 +56,12 @@ message(STATUS "Eigen3 ${Eigen3_VERSION} found.")
 #             OpenMP
 #
 #################################
-find_package(OpenMP REQUIRED)
+find_package(OpenMP)
 if (OpenMP_FOUND)
     message(STATUS "OpenMP found.")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 else ()
-    message(FATAL_ERROR "OpenMP not found")
+    message(STATUS "OpenMP not found")
 endif ()
 
 #################################
@@ -79,4 +90,4 @@ include_directories(
 file(GLOB SOURCE "src/*.cpp")
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE})
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} ${DBOW_LIBS})
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} ${DBOW_LIBS} OpenMP::OpenMP_CXX)
