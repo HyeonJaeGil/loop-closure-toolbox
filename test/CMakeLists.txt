@@ -25,6 +25,7 @@ include_directories(${DBOW_DIRS} ${VLAD_DIRS})
 set(LIBRARIES ${DBOW_LIBS} ${VLAD_LIBS})
 if (UNIX AND NOT APPLE)
     set(LIBRARIES ${LIBRARIES} stdc++fs)
+endif()
 
 add_executable(test_dbow_database test_dbow_database.cpp)
 target_link_libraries(test_dbow_database ${LIBRARIES})
