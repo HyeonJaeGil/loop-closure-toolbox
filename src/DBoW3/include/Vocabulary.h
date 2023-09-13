@@ -250,6 +250,14 @@ public:
   void save(const std::string &filename, bool binary_compressed=true) const;
 
   /**
+   * @brief Saves the vocabulary into a text file
+   * 
+   * @param filename 
+   */
+  void saveToTextFile(const std::string &filename) const;
+
+
+  /**
    * Loads the vocabulary from a file created with save
    * @param filename.
    */

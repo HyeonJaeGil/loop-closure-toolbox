@@ -1079,6 +1079,32 @@ void Vocabulary::save(const std::string &filename,  bool binary_compressed) cons
 // --------------------------------------------------------------------------
 
 
+void Vocabulary::saveToTextFile(const std::string &filename) const
+{
+    std::fstream f;
+    f.open(filename.c_str(),std::ios_base::out);
+    f << m_k << " " << m_L << " " << " " << m_scoring << " " << m_weighting << std::endl;
+
+    for(size_t i=1; i<m_nodes.size();i++)
+    {
+        const Node& node = m_nodes[i];
+
+        f << node.parent << " ";
+        if(node.isLeaf())
+            f << 1 << " ";
+        else
+            f << 0 << " ";
+
+        f << DescManip::toStringOld(node.descriptor) << " " << (double)node.weight << std::endl;
+    }
+
+    f.close();
+}
+
+
+// --------------------------------------------------------------------------
+
+
 void Vocabulary::load(const std::string &filename)
 {
     //check first if it is a binary file

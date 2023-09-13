@@ -44,6 +44,13 @@ public:
    * @return string version
    */
   static std::string toString(const cv::Mat &a);
+
+  /**
+   * Returns a descriptor from a string, compatible with DBoW2
+   * @param a 
+   * @return std::string 
+   */
+  static std::string toStringOld(const cv::Mat &a);
   
   /**
    * Returns a descriptor from a string

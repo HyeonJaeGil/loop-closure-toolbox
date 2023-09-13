@@ -161,6 +161,27 @@ std::string DescManip::toString(const cv::Mat &a)
 
 // --------------------------------------------------------------------------
   
+std::string DescManip::toStringOld(const cv::Mat &a)
+{
+    stringstream ss;
+
+    if (a.type()==CV_8U){
+        const unsigned char *p = a.ptr<unsigned char>();
+        for(int i = 0; i < a.cols; ++i, ++p)
+            ss << (int)*p << " ";
+    }else{
+
+        const float *p = a.ptr<float>();
+        for(int i = 0; i < a.cols; ++i, ++p)
+            ss <<  *p << " ";
+
+    }
+
+    return ss.str();
+}
+
+
+
 void DescManip::fromString(cv::Mat &a, const std::string &s)
 {
 

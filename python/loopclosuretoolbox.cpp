@@ -50,6 +50,12 @@ PYBIND11_MODULE(loopclosuretoolbox, m) {
         self.save(filename, binary);
       },
       py::arg("filename"), py::arg("binary") = true);
+  vocab_dbow.def(
+      "save_txt",
+      [](DBoW3::Vocabulary &self, const std::string &filename) {
+        self.saveToTextFile(filename);
+      },
+      py::arg("filename"));
   vocab_dbow.def("size", &DBoW3::Vocabulary::size);
   vocab_dbow.def(
       "get_word_weight",
